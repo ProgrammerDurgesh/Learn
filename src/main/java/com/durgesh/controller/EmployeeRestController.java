@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,10 +23,18 @@ public class EmployeeRestController {
     {
         return employeeRepo.save(employee);
     }
+    //get All Employee
     @GetMapping
-    public double employees()
+    public List<Employee> employees()
     {
-        List<Float> ages=employeeRepo.findAll().stream().map(Employee::getSalary).collect(Collectors.toList());
-        return ages.stream().mapToDouble(aFloat -> aFloat).summaryStatistics().getSum();
+        return employeeRepo.findAll();
     }
+
+    //get Employee by max-age
+    @GetMapping(value = "maxAge")
+    public Optional<Employee> getEmployeeInOldestAge()
+    {
+        return employeeRepo.findAll().stream().max((employee, t1) ->Integer.compare(employee.getAge(),t1.getAge()) );
+    }
+
 }
